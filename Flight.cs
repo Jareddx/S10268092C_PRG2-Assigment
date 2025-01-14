@@ -50,6 +50,7 @@ namespace S10268092_PRG2Assigment
             set { status = value; }
         }
 
+        public Flight() {}
         public Flight(string fn, string o, string d, string et, string s)
         {
             FlightNumber = fn;
@@ -59,7 +60,7 @@ namespace S10268092_PRG2Assigment
             Status = s;
 
         }
-        public abstract double CalculateFees();
+        public abstract double CalculateFees(int flightcount);
 
         public override string ToString()
         {
