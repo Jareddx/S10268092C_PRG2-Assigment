@@ -1,26 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace S10268092_PRG2Assigment
 {
-    class NORMFlight : Flight
+    class DDJBFlight : Flight
     {
-        public NORMFlight() : base() { }
+        private double requestFee;
 
-        public NORMFlight(string fn, string o, string d, string et, string s) : base(fn, o, d, et, s)
+        public double RequestFee
         {
+            get { return requestFee; }
+            set { requestFee = value; }
+        }
 
+        public DDJBFlight() : base() { }
+
+        public DDJBFlight(string fn, string o, string d, string et, string s, double rf) : base(fn, o, d, et, s)
+        {
+            RequestFee = rf;
         }
 
         public override double CalculateFees(int flightcount)
         {
             double terminalfees = 0;
-            double promodiscount = 0;
+            double promodiscount = 300;
             double tempdiscount = 1;
 
             if (flightcount > 3)
@@ -53,7 +59,7 @@ namespace S10268092_PRG2Assigment
                 terminalfees += 800;
             }
 
-            double totalfees = terminalfees * tempdiscount - promodiscount - 50;
+            double totalfees = terminalfees * tempdiscount - promodiscount;
             return totalfees;
         }
     }
