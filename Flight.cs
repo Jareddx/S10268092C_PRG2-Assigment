@@ -11,7 +11,6 @@ namespace S10268092_PRG2Assigment
      public abstract class Flight
     {
         private string flightNumber;
-
         public string FlightNumber
         {
             get { return flightNumber; }
@@ -19,7 +18,6 @@ namespace S10268092_PRG2Assigment
         }
 
         private string origin;
-
         public string Origin
         {
             get { return origin; }
@@ -27,7 +25,6 @@ namespace S10268092_PRG2Assigment
         }
 
         private string destination;
-
         public string Destination
         {
             get { return destination; }
@@ -35,7 +32,6 @@ namespace S10268092_PRG2Assigment
         }
 
         private DateTime expectedTime;
-
         public DateTime ExpectedTime
         {
             get { return expectedTime; }
@@ -43,7 +39,6 @@ namespace S10268092_PRG2Assigment
         }
 
         private string status;
-
         public string Status
         {
             get { return status; }
