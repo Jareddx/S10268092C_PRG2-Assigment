@@ -62,7 +62,6 @@ namespace S10268092_PRG2Assigment
             return $"Flight Number: {FlightNumber}, Origin: {Origin}, Destination: {Destination}, " +
             $"Expected Time: {ExpectedTime:yyyy-MM-dd HH:mm}, Status: {Status}";
         }
-
     }
 }
 
