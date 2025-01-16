@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace S10268092_PRG2Assigment
 {
-    abstract class Flight
+     public abstract class Flight
     {
         private string flightNumber;
 
