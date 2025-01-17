@@ -60,7 +60,7 @@ namespace S10268092_PRG2Assigment
         public override string ToString()
         {
             return $"Flight Number: {FlightNumber}, Origin: {Origin}, Destination: {Destination}, " +
-            $"Expected Time: {ExpectedTime:yyyy-MM-dd HH:mm}, Status: {Status}";
+             $"Expected Time: {ExpectedTime:yyyy-MM-dd HH:mm}";
         }
    }
 }

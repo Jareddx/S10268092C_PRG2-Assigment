@@ -9,7 +9,6 @@ namespace S10268092_PRG2Assigment
     public class BoardingGate
     {
         private string gateName;
-
         public string GateName
         {
             get { return gateName; }
@@ -17,7 +16,6 @@ namespace S10268092_PRG2Assigment
         }
 
         private bool supportsCFFT;
-
         public bool SupportsCFFT
         {
             get { return supportsCFFT; }
