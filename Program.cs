@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using S10268092_PRG2Assigment;
-/*
+
 // Basic Features Qn 1
 using (StreamReader sr = new StreamReader("airlines.csv"))
 {
     string? s = sr.ReadLine();
     Dictionary<string, Airline> airlines = new Dictionary<string, Airline>();
+    int count = 0;
     while ((s = sr.ReadLine()) != null)
     {
+        count += 1;
         string[] line = s.Split(',');
         string name = line[0];
         string code = line[1];
@@ -19,8 +21,9 @@ using (StreamReader sr = new StreamReader("airlines.csv"))
         };
 
         airlines.Add(name, airline);
-        Console.WriteLine(airlines[name]);
     }
+    Console.WriteLine("Loading Airlines...");
+    Console.WriteLine("{0} Airlines Loaded!", count);
 }
 
 
@@ -28,22 +31,64 @@ using (StreamReader sr = new StreamReader("boardinggates.csv"))
 {
     string? s = sr.ReadLine();
     Dictionary<string, BoardingGate> boardingGate = new Dictionary<string, BoardingGate>();
+    int count = 0;
     while ((s = sr.ReadLine()) != null)
     {
+        count += 1;
         string[] line = s.Split(',');
-        string name = line[0];
-        string code = line[1];
-        Airline airline = new Airline
+        string gate = line[0];
+        string ddjb = line[1];
+        string cfft = line[2];
+        string lwtt = line[3];
+
+        bool supportddjb = false;
+        bool supportcfft = false;
+        bool supportlwtt = false;
+        if (ddjb == "True")
         {
-            Name = name,
-            Code = code,
+            supportddjb = true;
+            
+        }
+
+        else if (ddjb == "False")
+        {
+            supportddjb = false;
+        }
+
+        if (cfft == "True")
+        {
+            supportcfft = true;
+        }
+
+        else if (cfft == "False")
+        {
+            supportcfft = false;
+        }
+
+        if (lwtt == "True")
+        {
+            supportlwtt = true;
+        }
+
+        else if (lwtt == "False")
+        {
+            supportlwtt = false;
+        }
+        BoardingGate boardinggate = new BoardingGate
+        {
+            GateName = gate,
+            SupportsDDJB = supportddjb,
+            SupportsCFFT = supportcfft,
+            SupportsLWTT = supportlwtt
         };
 
-        airline.Add(name, airline);
-        Console.WriteLine(airline[name]);
+        BoardingGate gatedata = new BoardingGate(gate,supportcfft, supportddjb, supportlwtt);
+        boardingGate.Add(gate, gatedata);
     }
+    Console.WriteLine("Loading Boarding Gates...");
+    Console.WriteLine("{0} Boarding Gates Loaded!", count);
 }
-*/
+
 
 // Basic Features Qn 2
 IDictionary<string, Flight> FlightCollection = new Dictionary<string, Flight>();
