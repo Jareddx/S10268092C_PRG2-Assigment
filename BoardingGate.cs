@@ -48,12 +48,13 @@ namespace S10268092_PRG2Assigment
 
         public BoardingGate() { }
 
-        public BoardingGate(string gateName, bool cfft, bool ddjb, bool lwtt)
+        public BoardingGate(string gateName, bool cfft, bool ddjb, bool lwtt, Flight flight = null)
         {
             this.gateName = gateName;
             this.supportsCFFT = cfft;
             this.supportsDDJB = ddjb;
             this.supportsLWTT = lwtt;
+            this.flight = flight;
         }
 
         public double CalculateFees()

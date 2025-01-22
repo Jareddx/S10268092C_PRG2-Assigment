@@ -46,7 +46,7 @@ namespace S10268092_PRG2Assigment
         }
 
         public Flight() {}
-        public Flight(string fn, string o, string d, string et, string s)
+        public Flight(string fn, string o, string d, string et, string s = "Unknown")
         {
             FlightNumber = fn;
             Origin = o;
@@ -59,8 +59,10 @@ namespace S10268092_PRG2Assigment
 
         public override string ToString()
         {
-            return $"Flight Number: {FlightNumber}, Origin: {Origin}, Destination: {Destination}, " +
-             $"Expected Time: {ExpectedTime:yyyy-MM-dd HH:mm}";
+            return $"Flight Number: {FlightNumber}\n" +
+                   $"Origin: {Origin}\n" +
+                   $"Destination: {Destination}\n" +
+                   $"Expected Time: {ExpectedTime:yyyy-MM-dd HH:mm}";
         }
    }
 }

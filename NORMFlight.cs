@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace S10268092_PRG2Assigment
 {
-    class NORMFlight : Flight
+    public class NORMFlight : Flight
     {
         public NORMFlight() : base() { }
 
-        public NORMFlight(string fn, string o, string d, string et, string s) : base(fn, o, d, et, s)
+        public NORMFlight(string fn, string o, string d, string et, string s = "Unknown") : base(fn, o, d, et, s)
         {
 
         }
