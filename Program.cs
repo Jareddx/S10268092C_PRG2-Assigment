@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Numerics;
+using System.Reflection.Metadata.Ecma335;
 using System.Transactions;
 using System.Xml.Linq;
 using S10268092_PRG2Assigment;
@@ -31,9 +32,23 @@ void DisplayTable()
         DisplayTable();
     }
 
-    if (option == 3)
+    else if (option == 3)
     {
         AssignGate();
+        Console.WriteLine();
+        DisplayTable();
+    }
+
+    else if (option == 4)
+    {
+        AddFlight();
+        Console.WriteLine();
+        DisplayTable();
+    }
+
+    else if (option == 7)
+    {
+        DisplayScheduledFlights();
         Console.WriteLine();
         DisplayTable();
     }
@@ -152,7 +167,7 @@ void DisplayFlightInfo()
 {
     List<Flight> FlightList = new List<Flight>();
     List<Airline> temp = new List<Airline>();
-    String AirlineName = "";
+    string AirlineName = "";
 
     using (StreamReader sr = new StreamReader("airlines.csv"))
     {
@@ -199,11 +214,11 @@ void DisplayFlightInfo()
 // Basic Features Qn 5
 void AssignGate()
 {
-    List<String> temp = new List<String>();
+    List<string> temp = new List<string>();
 
 
     Console.Write("Enter Flight Number: ");
-    String FlightNo = Console.ReadLine();
+    string FlightNo = Console.ReadLine();
     Flight FlightData = FlightCollection[FlightNo];
     List<Flight> flights = new List<Flight> { FlightData };
 
@@ -225,7 +240,7 @@ void AssignGate()
     }
 
     Console.Write("Enter Boarding Gate Name: ");
-    String GateName = Console.ReadLine();
+    string GateName = Console.ReadLine();
     BoardingGate BoardingGateData = boardingGate[GateName];
 
     if (BoardingGateData.Flight != null)
@@ -238,7 +253,7 @@ void AssignGate()
     Console.WriteLine("Special Request Code: {0}", temp[0]);
     Console.WriteLine(BoardingGateData);
     Console.Write("Would you like to update the status of the flight? (Y/N) ");
-    String answer = Console.ReadLine();
+    string answer = Console.ReadLine();
 
     if (answer == "Y")
     {
@@ -266,12 +281,115 @@ void AssignGate()
     Console.WriteLine("Flight {0} has been assigned to Boarding Gate {1}!", FlightNo, GateName);
 }
 // Basic Features Qn 6
+void AddFlight()
+{
+    while (true)
+    {
+        Console.Write("Enter Flight Number: ");
+        string FlightNo = Console.ReadLine();
+        Console.Write("Enter Origin: ");
+        string Origin = Console.ReadLine();
+        Console.Write("Enter Destination: ");
+        string Destination = Console.ReadLine();
+        Console.Write("Enter Expected Departure/Arrival Time (dd/mm/yyyy hh:mm): ");
+        string ExpectedTime = Console.ReadLine();
+        Console.Write("Enter Special Request Code (CFFT/DDJB/LWTT/None): ");
+        string RequestCode = Console.ReadLine();
 
+        NORMFlight flightdata = new NORMFlight(FlightNo, Origin, Destination, ExpectedTime, RequestCode);
+        FlightCollection.Add(FlightNo, flightdata);
+
+        using (StreamWriter sw = new StreamWriter("flights.csv", true))
+        {
+            if (RequestCode == "None")
+            {
+                RequestCode = "";
+            }
+            sw.WriteLine(FlightNo + "," + Origin + "," + Destination + "," + ExpectedTime + "," + RequestCode);
+        }
+
+        Console.WriteLine("Flight {0} has been added!", FlightNo);
+        Console.Write("Would you like to add another flight? (Y/N)");
+        string option = Console.ReadLine();
+        if (option == "N")
+        {
+            break;
+        }
+    } 
+}
 // Basic Features Qn 7
 
 // Basic Features Qn 8
 
 // Basic Features Qn 9
+void DisplayScheduledFlights()
+{
+    List<Flight> FlightList = new List<Flight>();
+    List<BoardingGate> BoardingList = new List<BoardingGate>();
+    List<Airline> temp = new List<Airline>();
+    string AirlineName = "";
+    string BoardingGate = "Unassigned";
+
+    using (StreamReader sr = new StreamReader("airlines.csv"))
+    {
+        string? s = sr.ReadLine();
+        while ((s = sr.ReadLine()) != null)
+        {
+            string[] data = s.Split(',');
+            Airline AirlineData = new Airline()
+            {
+                Name = data[0],
+                Code = data[1],
+            };
+            temp.Add(AirlineData);
+        }
+    }
+
+    foreach (var flight in FlightCollection)
+    {
+        Flight flightdata = flight.Value;
+        FlightList.Add(flightdata);
+    }
+
+    foreach (var gate in boardingGate)
+    {
+        BoardingGate boardingdata = gate.Value;
+        BoardingList.Add(boardingdata);
+    }
+
+    FlightList.Sort();
+
+    Console.WriteLine("Flight Number   Airline Name           Origin                 Destination            Expected Departure/Arrival Time     Status          Boarding Gate");
+    for (int i = 0; i < FlightList.Count(); i++)
+
+    {
+        Flight F = FlightList[i];
+        string[] split = F.FlightNumber.Split(" ");
+
+        for (int x = 0; x < temp.Count(); x++)
+        {
+            Airline C = temp[x];
+            if (C.Code == split[0])
+            {
+                AirlineName = C.Name;
+            }
+        }
+        
+        /*
+        for (int z = 0; z < BoardingList.Count(); z++)
+        {
+            BoardingGate BG = BoardingList[z];
+            Flight F2 = BG.Flight;
+            if (F.FlightNumber == F.FlightNumber)
+            {
+                BoardingGate = BG.GateName;
+            }
+        }
+        */
+
+        Console.WriteLine("{0,-16}{1,-23}{2,-23}{3,-23}{4,-36}{5,-16}{6, -10}", F.FlightNumber, AirlineName, F.Origin, F.Destination, F.ExpectedTime, F.Status, BoardingGate);
+    }
+}
 
 // Main Loop
 Console.WriteLine();

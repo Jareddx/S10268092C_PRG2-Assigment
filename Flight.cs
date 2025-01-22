@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace S10268092_PRG2Assigment
 {
-     public abstract class Flight
+    public abstract class Flight : IComparable<Flight>
     {
         private string flightNumber;
         public string FlightNumber
@@ -45,8 +45,8 @@ namespace S10268092_PRG2Assigment
             set { status = value; }
         }
 
-        public Flight() {}
-        public Flight(string fn, string o, string d, string et, string s = "Unknown")
+        public Flight() { }
+        public Flight(string fn, string o, string d, string et, string s = "Scheduled")
         {
             FlightNumber = fn;
             Origin = o;
@@ -64,6 +64,14 @@ namespace S10268092_PRG2Assigment
                    $"Destination: {Destination}\n" +
                    $"Expected Time: {ExpectedTime:yyyy-MM-dd HH:mm}";
         }
-   }
+
+        public int CompareTo(Flight other)
+        {
+            if (other == null)
+                return 1;
+
+            return this.ExpectedTime.CompareTo(other.ExpectedTime);
+        }
+    }
 }
 
