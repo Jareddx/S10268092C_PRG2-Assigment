@@ -32,6 +32,12 @@ void DisplayTable()
         DisplayTable();
     }
 
+    else if (option ==2)
+    {
+        DisplayBoardingGate();
+        Console.WriteLine();
+        DisplayTable();
+    }
     else if (option == 3)
     {
         AssignGate();
@@ -210,6 +216,15 @@ void DisplayFlightInfo()
 }
 
 // Basic Features Qn 4
+void DisplayBoardingGate()
+{
+    Console.WriteLine("{0,-20}{1,-25}{2,-25}{3,-25}", "Gate Name", "DDJB", "CFFT", "LWTT");
+    foreach (KeyValuePair<string, BoardingGate> kvp in boardingGate)
+    {
+        Console.WriteLine("{0,-20}{1,-25}{2,-25}{3,-25}", kvp.Key, kvp.Value.SupportsDDJB, kvp.Value.SupportsCFFT, kvp.Value.SupportsLWTT);
+    }
+
+}
 
 // Basic Features Qn 5
 void AssignGate()

@@ -64,8 +64,7 @@ namespace S10268092_PRG2Assigment
 
         public override string ToString()
         {
-            string flightInfo = Flight != null ? Flight.ToString() : "No flight assigned";
-            return $"Gate: {GateName}\nSupports CFFT: {SupportsCFFT}\nSupports DDJB: {SupportsDDJB}\nSupports LWTT: {SupportsLWTT}\nFlight: {flightInfo}";
+            return $"{GateName,-20}{SupportsCFFT,-25}{SupportsDDJB,-25}{SupportsLWTT,-25}".Trim();
         }
     }
 }
