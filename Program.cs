@@ -52,6 +52,12 @@ void DisplayTable()
         DisplayTable();
     }
 
+    else if (option == 5)
+    {
+        DisplayAirlineDetails();
+        Console.WriteLine();
+        DisplayTable();
+    }
     else if (option == 7)
     {
         DisplayScheduledFlights();
@@ -63,6 +69,7 @@ void DisplayTable()
 // Basic Features Qn 1
 
 Dictionary<string, Airline> airlines = new Dictionary<string, Airline>();
+Dictionary<string, string> temp = new Dictionary<string, string>();
 using (StreamReader sr = new StreamReader("airlines.csv"))
 {
     string? s = sr.ReadLine();
@@ -80,6 +87,8 @@ using (StreamReader sr = new StreamReader("airlines.csv"))
             Code = code,
         };
 
+
+        temp.Add(code,name);
         airlines.Add(name, airline);
     }
     Console.WriteLine("Loading Airlines...");
@@ -333,7 +342,21 @@ void AddFlight()
     } 
 }
 // Basic Features Qn 7
+void DisplayAirlineDetails()
+{
+    Console.WriteLine("{0,-16}{1,-20}","Airline Code", "Airline Name");
+    foreach (KeyValuePair<string, Airline> kvp in airlines)
+    {
+        Console.WriteLine("{0,-16}{1,-20}",kvp.Value.Code,kvp.Key);
+    }
+    Console.Write("Enter Airline Code: ");
+    string code= Console.ReadLine();
+    Console.WriteLine("=============================================");
+    Console.WriteLine("List of Flights for {0}", temp[code]);
+    Console.WriteLine("=============================================");
 
+
+}
 // Basic Features Qn 8
 
 // Basic Features Qn 9
