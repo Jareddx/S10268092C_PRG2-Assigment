@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Numerics;
 using System.Reflection.Metadata.Ecma335;
+using System.Runtime.InteropServices;
 using System.Transactions;
 using System.Xml.Linq;
 using S10268092_PRG2Assigment;
@@ -58,6 +59,12 @@ void DisplayTable()
         Console.WriteLine();
         DisplayTable();
     }
+    else if (option ==6)
+    {
+        ModifyFlight();
+        Console.WriteLine();
+        DisplayTable();
+    }
     else if (option == 7)
     {
         DisplayScheduledFlights();
@@ -69,7 +76,7 @@ void DisplayTable()
 // Basic Features Qn 1
 
 Dictionary<string, Airline> airlines = new Dictionary<string, Airline>();
-Dictionary<string, string> temp = new Dictionary<string, string>();
+Dictionary<string, string> temp1= new Dictionary<string, string>();
 using (StreamReader sr = new StreamReader("airlines.csv"))
 {
     string? s = sr.ReadLine();
@@ -88,7 +95,7 @@ using (StreamReader sr = new StreamReader("airlines.csv"))
         };
 
 
-        temp.Add(code,name);
+        temp1.Add(code,name);
         airlines.Add(name, airline);
     }
     Console.WriteLine("Loading Airlines...");
@@ -205,7 +212,7 @@ void DisplayFlightInfo()
         FlightList.Add(flightdata);
     }
 
-    Console.WriteLine("Flight Number   Airline Name           Origin                 Destination            Expected Departure/Arrival Time");
+    Console.WriteLine("{0,-16}{1,-23}{2,-23}{3,-23}{4,-10}", "Flight Number", "Airline Name", "Origin", "Destination", "Expected Departure/Arrival Time");
     for (int i = 0; i < FlightList.Count(); i++)
 
     {
@@ -352,12 +359,149 @@ void DisplayAirlineDetails()
     Console.Write("Enter Airline Code: ");
     string code= Console.ReadLine();
     Console.WriteLine("=============================================");
-    Console.WriteLine("List of Flights for {0}", temp[code]);
+    Console.WriteLine("List of Flights for {0}", temp1[code]);
     Console.WriteLine("=============================================");
-
-
+    List<Flight> FlightList = new List<Flight>();
+    List<Airline> temp = new List<Airline>();
+    string AirlineName = temp1[code];
+    foreach (var flights in FlightCollection)
+    {
+        Flight flightdata = flights.Value;
+        FlightList.Add(flightdata);
+    }
+    var Flights = FlightList.FindAll(f => f.FlightNumber.StartsWith(code));
+    Console.WriteLine("{0,-16}{1,-23}{2,-23}{3,-23}{4,-10}", "Flight Number", "Airline Name", "Origin", "Destination", "Expected Departure/Arrival Time");
+    foreach(var flight in Flights)
+    {
+        Console.WriteLine("{0,-16}{1,-23}{2,-23}{3,-23}{4,-10}", flight.FlightNumber, AirlineName, flight.Origin, flight.Destination, flight.ExpectedTime);
+    }
 }
 // Basic Features Qn 8
+Dictionary<string, string> flightSpecialRequestCodes = new Dictionary<string, string>();
+
+void ModifyFlight()
+{
+
+    Console.WriteLine("{0,-16}{1,-20}", "Airline Code", "Airline Name");
+    foreach (KeyValuePair<string, Airline> kvp in airlines)
+    {
+        Console.WriteLine("{0,-16}{1,-20}", kvp.Value.Code, kvp.Key);
+    }
+    Console.Write("Enter Airline Code: ");
+    string code = Console.ReadLine();
+    Console.WriteLine("=============================================");
+    Console.WriteLine("List of Flights for {0}", temp1[code]);
+    Console.WriteLine("=============================================");
+    List<Flight> FlightList = new List<Flight>();
+    List<Airline> temp = new List<Airline>();
+    string AirlineName = temp1[code];
+    List<Flight> airlineFlights = FlightCollection.Values
+    .Where(f => f.FlightNumber.StartsWith(code))
+    .ToList();
+    foreach (var flights in FlightCollection)
+    {
+        Flight flightdata = flights.Value;
+        FlightList.Add(flightdata);
+    }
+    var Flights = FlightList.FindAll(f => f.FlightNumber.StartsWith(code));
+    Console.WriteLine("{0,-16}{1,-23}{2,-23}{3,-23}{4,-10}", "Flight Number", "Airline Name", "Origin", "Destination", "Expected Departure/Arrival Time");
+    foreach (var flight in Flights)
+    {
+        Console.WriteLine("{0,-16}{1,-23}{2,-23}{3,-23}{4,-10}", flight.FlightNumber, AirlineName, flight.Origin, flight.Destination, flight.ExpectedTime);
+    }
+
+    
+    Flight selectedFlight;
+    string flightNumber="";
+    while ((selectedFlight = airlineFlights.FirstOrDefault(f => f.FlightNumber == flightNumber)) == null)
+    {
+        Console.Write("Choose an existing flight to modify of delete: ");
+        flightNumber = Console.ReadLine();
+    }
+    Console.WriteLine("1. Modify Flight");
+    Console.WriteLine("2. Delete Flight");
+    Console.Write("Choose an option: ");
+    int option = Convert.ToInt32(Console.ReadLine());
+    void DisplayNewFlightDetails()
+        {
+            Console.WriteLine();
+            Console.WriteLine("Flight updated!");
+            Console.WriteLine("Flight Number: {0}", flightNumber);
+            Console.WriteLine("Airline Name: {0}", temp1[code]);
+            Console.WriteLine("Origin: {0}", selectedFlight.Origin);
+            Console.WriteLine("Destination: {0}", selectedFlight.Destination);
+            Console.WriteLine("Expected Time: {0}", selectedFlight.ExpectedTime);
+            Console.WriteLine("Status: {0}", selectedFlight.Status);
+            string requestCode = flightSpecialRequestCodes.ContainsKey(selectedFlight.FlightNumber)
+                                 ? flightSpecialRequestCodes[selectedFlight.FlightNumber]
+                                 : "No special request code";
+            Console.WriteLine("Special Request Code: {0}", requestCode);
+            Console.WriteLine("Boarding Gate: {0}",boardingGate);
+        }
+    if (option == 1)
+    {
+        Console.WriteLine("1. Modify Basic Information");
+        Console.WriteLine("2. Modify Status");
+        Console.WriteLine("3. Modify Special Request Code");
+        Console.WriteLine("4. Modify Boarding Gate");
+        Console.Write("Choose an option: ");
+        int option2 = Convert.ToInt32(Console.ReadLine());
+
+        if (option2 == 1)
+        {
+            Console.Write("Enter new Origin: ");
+            selectedFlight.Origin = Console.ReadLine();
+            Console.WriteLine();
+            Console.Write("Enter new Destination: ");
+            selectedFlight.Destination = Console.ReadLine();
+            Console.WriteLine();
+            Console.Write("Enter new Expected Departure/Arrival Time (dd/mm/yyyy hh:mm): ");
+            selectedFlight.ExpectedTime = DateTime.Parse(Console.ReadLine());
+            DisplayNewFlightDetails();
+        }
+        else if (option2 == 2)
+        {
+            Console.Write("Enter new Status: ");
+            selectedFlight.Status = Console.ReadLine();
+            DisplayNewFlightDetails();
+        }
+        else if (option2 == 3)
+        {
+            Console.Write("Enter new Special Request Code: ");
+            string specialRequestCode = Console.ReadLine();
+            if (flightSpecialRequestCodes.ContainsKey(selectedFlight.FlightNumber))
+            {
+                flightSpecialRequestCodes[selectedFlight.FlightNumber] = specialRequestCode;
+            }
+            else
+            {
+                flightSpecialRequestCodes.Add(selectedFlight.FlightNumber, specialRequestCode);
+            }
+            DisplayNewFlightDetails();
+        }
+        else if (option2 == 4)
+        {
+            Dictionary<string, string> flightBoardingGates = new Dictionary<string, string>();
+            Console.Write("Enter new Boarding Gate: ");
+            string boardingGate = Console.ReadLine();
+
+            // Update the boarding gate for the selected flight
+            if (flightBoardingGates.ContainsKey(selectedFlight.FlightNumber))
+            {
+                // Update the existing boarding gate
+                flightBoardingGates[selectedFlight.FlightNumber] = boardingGate;
+            }
+            else
+            {
+                // Add a new boarding gate if not already present
+                flightBoardingGates.Add(selectedFlight.FlightNumber, boardingGate);
+            }
+            DisplayNewFlightDetails();
+        }
+
+    }
+    
+}
 
 // Basic Features Qn 9
 void DisplayScheduledFlights()
