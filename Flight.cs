@@ -6,6 +6,15 @@ using System.Runtime;
 using System.Text;
 using System.Threading.Tasks;
 
+/*
+================================
+Student name: Dayao Jaredd
+Student number: S10268092
+Partner name: Yew Jun Jie
+================================
+*/
+
+
 namespace S10268092_PRG2Assigment
 {
     public abstract class Flight : IComparable<Flight>
