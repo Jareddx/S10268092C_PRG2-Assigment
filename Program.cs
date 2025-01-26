@@ -8,7 +8,13 @@ using System.Transactions;
 using System.Xml.Linq;
 using S10268092_PRG2Assigment;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+/*
 
+Student name: Dayao Jaredd
+Student number: S10268092
+Partner name: Yew Jun Jie
+
+*/
 void DisplayTable()
 {
     Console.WriteLine("=============================================");
