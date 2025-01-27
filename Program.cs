@@ -430,6 +430,7 @@ void ModifyFlight()
     Console.WriteLine("2. Delete Flight");
     Console.Write("Choose an option: ");
     int option = Convert.ToInt32(Console.ReadLine());
+    Dictionary<string, string> flightBoardingGates = new Dictionary<string, string>();
     void DisplayNewFlightDetails()
         {
             Console.WriteLine();
@@ -444,7 +445,11 @@ void ModifyFlight()
                                  ? flightSpecialRequestCodes[selectedFlight.FlightNumber]
                                  : "No special request code";
             Console.WriteLine("Special Request Code: {0}", requestCode);
-            Console.WriteLine("Boarding Gate: {0}",boardingGate);
+        string boardingGate = flightBoardingGates.ContainsKey(selectedFlight.FlightNumber)
+                      ? flightBoardingGates[selectedFlight.FlightNumber]
+                      : "No boarding gate assigned";
+
+        Console.WriteLine("Boarding Gate: {0}", boardingGate);
         }
     if (option == 1)
     {
@@ -489,7 +494,6 @@ void ModifyFlight()
         }
         else if (option2 == 4)
         {
-            Dictionary<string, string> flightBoardingGates = new Dictionary<string, string>();
             Console.Write("Enter new Boarding Gate: ");
             string boardingGate = Console.ReadLine();
 
@@ -508,11 +512,52 @@ void ModifyFlight()
         }
 
     }
-    
-}
 
-// Basic Features Qn 9
-void DisplayScheduledFlights()
+
+    else if (option == 2)
+    {
+        string flightNumberToDelete = flightNumber;
+        // Check if the flight exists
+        if (FlightCollection.ContainsKey(flightNumberToDelete))
+        {
+            // Confirm deletion
+            Console.Write($"Are you sure you want to delete flight {flightNumberToDelete}? (Y/N): ");
+            string confirmation = Console.ReadLine();
+
+            if (confirmation.Equals("Y", StringComparison.OrdinalIgnoreCase))
+            {
+                // Remove the flight from FlightCollection
+                FlightCollection.Remove(flightNumberToDelete);
+
+                // Remove associated Special Request Code, if it exists
+                if (flightSpecialRequestCodes.ContainsKey(flightNumberToDelete))
+                {
+                    flightSpecialRequestCodes.Remove(flightNumberToDelete);
+                }
+
+                // Remove associated Boarding Gate, if it exists
+                if (flightBoardingGates.ContainsKey(flightNumberToDelete))
+                {
+                    flightBoardingGates.Remove(flightNumberToDelete);
+                }
+
+                Console.WriteLine($"Flight {flightNumberToDelete} has been successfully deleted.");
+            }
+            else
+            {
+                Console.WriteLine("Deletion canceled.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Flight Number not found.");
+        }
+
+
+    }
+
+    // Basic Features Qn 9
+    void DisplayScheduledFlights()
 {
     List<Flight> FlightList = new List<Flight>();
     List<BoardingGate> BoardingList = new List<BoardingGate>();
