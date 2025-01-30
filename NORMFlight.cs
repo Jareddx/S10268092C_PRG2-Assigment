@@ -25,15 +25,16 @@ namespace S10268092_PRG2Assigment
 
         }
 
-        public override double CalculateFees(int flightcount)
+        public override List<double> CalculateFees(int flightcount)
         {
-            double terminalfees = 0;
-            double promodiscount = 0;
+            double terminalfees = 300;
+            double promodiscount = 300;
             double tempdiscount = 1;
 
             if (flightcount > 3)
             {
-                promodiscount += 350;
+                int temp = flightcount / 3;
+                promodiscount += 350 * temp;
             }
 
             if (flightcount > 5)
@@ -51,18 +52,20 @@ namespace S10268092_PRG2Assigment
                 promodiscount += 25;
             }
 
-            if (Destination == "SIN")
+            if (Destination == "Singapore (SIN)")
             {
                 terminalfees += 500;
             }
 
-            if (Origin == "SIN")
+            if (Origin == "Singapore (SIN)")
             {
                 terminalfees += 800;
             }
 
-            double totalfees = terminalfees * tempdiscount - promodiscount - 50;
-            return totalfees;
+            double totalfees = terminalfees * tempdiscount - promodiscount;
+            double totaldiscount = terminalfees - totalfees;
+            List<double> Fees = new List<double> { totalfees, totaldiscount, terminalfees };
+            return Fees;
         }
     }
 }

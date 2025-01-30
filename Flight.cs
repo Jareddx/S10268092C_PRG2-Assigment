@@ -64,7 +64,7 @@ namespace S10268092_PRG2Assigment
             Status = s;
 
         }
-        public abstract double CalculateFees(int flightcount);
+        public abstract List<double> CalculateFees(int flightcount);
 
         public override string ToString()
         {

@@ -26,20 +26,21 @@ namespace S10268092_PRG2Assigment
 
         public DDJBFlight() : base() { }
 
-        public DDJBFlight(string fn, string o, string d, string et, string s, double rf) : base(fn, o, d, et, s)
+        public DDJBFlight(string fn, string o, string d, string et, string s, double rf = 0) : base(fn, o, d, et, s)
         {
             RequestFee = rf;
         }
 
-        public override double CalculateFees(int flightcount)
+        public override List<double> CalculateFees(int flightcount)
         {
-            double terminalfees = 0;
+            double terminalfees = 300;
             double promodiscount = 300;
             double tempdiscount = 1;
 
             if (flightcount > 3)
             {
-                promodiscount += 350;
+                int temp = flightcount / 3;
+                promodiscount += 350 * temp;
             }
 
             if (flightcount > 5)
@@ -57,18 +58,20 @@ namespace S10268092_PRG2Assigment
                 promodiscount += 25;
             }
 
-            if (Destination == "SIN")
+            if (Destination == "Singapore (SIN)")
             {
                 terminalfees += 500;
             }
 
-            if (Origin == "SIN")
+            if (Origin == "Singapore (SIN)")
             {
                 terminalfees += 800;
             }
 
             double totalfees = terminalfees * tempdiscount - promodiscount;
-            return totalfees;
+            double totaldiscount = terminalfees - totalfees;
+            List<double> Fees = new List<double> { totalfees, totaldiscount, terminalfees };
+            return Fees;
         }
     }
 }

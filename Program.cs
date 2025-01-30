@@ -29,6 +29,7 @@ void DisplayTable()
     Console.WriteLine("5. Display Airline Flights");
     Console.WriteLine("6. Modify Flight Details");
     Console.WriteLine("7. Display Flight Schedule");
+    Console.WriteLine("9. Display the total fee per airline");
     Console.WriteLine("0. Exit");
     Console.WriteLine();
     Console.Write("Please select your option: ");
@@ -76,6 +77,12 @@ void DisplayTable()
     else if (option == 7)
     {
         DisplayScheduledFlights();
+        Console.WriteLine();
+        DisplayTable();
+    }
+    else if (option == 9)
+    {
+        DisplayTotalFee();
         Console.WriteLine();
         DisplayTable();
     }
@@ -568,7 +575,7 @@ void ModifyFlight()
     }
 }
 
-    // Basic Features Qn 9
+// Basic Features Qn 9
 void DisplayScheduledFlights()
 {
     Console.WriteLine("=============================================");
@@ -644,9 +651,526 @@ void DisplayScheduledFlights()
     }
 }
 
+
+// Advanced Features part (b)
+void DisplayTotalFee()
+{
+    Console.WriteLine("=============================================");
+    Console.WriteLine("Total fee per airline for the day");
+    Console.WriteLine("=============================================");
+
+    IDictionary<string, Flight> AdvancedCollection = new Dictionary<string, Flight>();
+    using (StreamReader sr = new StreamReader("flights.csv"))
+    {
+        int count = 0;
+        string? s = sr.ReadLine();
+        while ((s = sr.ReadLine()) != null)
+        {
+            count += 1;
+            string[] data = s.Split(',');
+            NORMFlight flightdata = new NORMFlight(data[0], data[1], data[2], data[3], data[4]);
+            AdvancedCollection.Add(data[0], flightdata);
+        }
+    }
+
+    List<Flight> FlightList = new List<Flight>();
+    List<BoardingGate> BoardingList = new List<BoardingGate>();
+    List<Airline> temp = new List<Airline>();
+    string AirlineName = "";
+
+    double SQFees = 0;
+    double SQPromo = 0;
+    double SQFinal = 0;
+
+    double MHFees = 0;
+    double MHPromo = 0;
+    double MHFinal = 0;
+
+    double JLFees = 0;
+    double JLPromo = 0;
+    double JLFinal = 0;
+
+    double CXFees = 0;
+    double CXPromo = 0;
+    double CXFinal = 0;
+
+    double QFFees = 0;
+    double QFPromo = 0;
+    double QFFinal = 0;
+
+    double TRFees = 0;
+    double TRPromo = 0;
+    double TRFinal = 0;
+
+    double EKFees = 0;
+    double EKPromo = 0;
+    double EKFinal = 0;
+
+    double BAFees = 0;
+    double BAPromo = 0;
+    double BAFinal = 0;
+
+    double FinalFee = 0;
+    double FinalDiscount = 0;
+    double TerminalFee = 0;
+
+
+    foreach (var flight in AdvancedCollection)
+    {
+        Flight flightdata = flight.Value;
+        FlightList.Add(flightdata);
+    }
+
+    for (int i = 0; i < FlightList.Count(); i++)
+    {
+
+        Flight F = FlightList[i];
+        string[] id = F.FlightNumber.Split(" ");
+
+        for (int z = 0; z < BoardingList.Count(); z++)
+        {
+            BoardingGate BG = BoardingList[z];
+            Flight F2 = BG.Flight;
+            if (F2 == null)
+            {
+                Console.WriteLine("Please make sure that all flights have been assigned to a Boarding Gate first before calling this option again.");
+                return;
+            }
+        }
+
+        if (id[0] == "SQ")
+        {
+            if (F.Status == "")
+            {
+                NORMFlight temp2 = new NORMFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(4);
+                SQFees += total[2];
+                SQPromo += total[1];
+                SQFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+
+            if (F.Status == "CFFT")
+            {
+                CFFTFlight temp2 = new CFFTFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(4);
+                SQFees += total[2];
+                SQPromo += total[1];
+                SQFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+
+            if (F.Status == "DDJB")
+            {
+                DDJBFlight temp2 = new DDJBFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(4);
+                SQFees += total[2];
+                SQPromo += total[1];
+                SQFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+
+            if (F.Status == "LWTT")
+            {
+                LWTTFlight temp2 = new LWTTFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(4);
+                SQFees += total[2];
+                SQPromo += total[1];
+                SQFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+        }
+
+        if (id[0] == "MH")
+        {
+            if (F.Status == "")
+            {
+                NORMFlight temp2 = new NORMFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(4);
+                MHFees += total[2];
+                MHPromo += total[1];
+                MHFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+
+            if (F.Status == "CFFT")
+            {
+                CFFTFlight temp2 = new CFFTFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(4);
+                MHFees += total[2];
+                MHPromo += total[1];
+                MHFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+
+            if (F.Status == "DDJB")
+            {
+                DDJBFlight temp2 = new DDJBFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(4);
+                MHFees += total[2];
+                MHPromo += total[1];
+                MHFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+
+            if (F.Status == "LWTT")
+            {
+                LWTTFlight temp2 = new LWTTFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(4);
+                MHFees += total[2];
+                MHPromo += total[1];
+                MHFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+        }
+
+        if (id[0] == "JL")
+        {   
+            if (F.Status == "")
+            {
+                NORMFlight temp2 = new NORMFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(4);
+                JLFees += total[2];
+                JLPromo += total[1];
+                JLFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+
+            if (F.Status == "CFFT")
+            {
+                CFFTFlight temp2 = new CFFTFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(4);
+                JLFees += total[2];
+                JLPromo += total[1];
+                JLFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+
+            if (F.Status == "DDJB")
+            {
+                DDJBFlight temp2 = new DDJBFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(4);
+                JLFees += total[2];
+                JLPromo += total[1];
+                JLFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+
+            if (F.Status == "LWTT")
+            {
+                LWTTFlight temp2 = new LWTTFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(4);
+                JLFees += total[2];
+                JLPromo += total[1];
+                JLFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+        }
+
+        if (id[0] == "CX")
+        {
+            if (F.Status == "")
+            {
+                NORMFlight temp2 = new NORMFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(4);
+                CXFees += total[2];
+                CXPromo += total[1];
+                CXFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+
+            if (F.Status == "CFFT")
+            {
+                CFFTFlight temp2 = new CFFTFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(4);
+                CXFees += total[2];
+                CXPromo += total[1];
+                CXFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+
+            if (F.Status == "DDJB")
+            {
+                DDJBFlight temp2 = new DDJBFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(4);
+                CXFees += total[2];
+                CXPromo += total[1];
+                CXFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+
+            if (F.Status == "LWTT")
+            {
+                LWTTFlight temp2 = new LWTTFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(4);
+                CXFees += total[2];
+                CXPromo += total[1];
+                CXFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+        }
+
+        if (id[0] == "QF")
+        {
+            if (F.Status == "")
+            {
+                NORMFlight temp2 = new NORMFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(4);
+                QFFees += total[2];
+                QFPromo += total[1];
+                QFFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+
+            if (F.Status == "CFFT")
+            {
+                CFFTFlight temp2 = new CFFTFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(4);
+                QFFees += total[2];
+                QFPromo += total[1];
+                QFFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+
+            if (F.Status == "DDJB")
+            {
+                DDJBFlight temp2 = new DDJBFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(4);
+                QFFees += total[2];
+                QFPromo += total[1];
+                QFFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+
+            if (F.Status == "LWTT")
+            {
+                LWTTFlight temp2 = new LWTTFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(4);
+                QFFees += total[2];
+                QFPromo += total[1];
+                QFFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+        }
+
+        if (id[0] == "TR")
+        {
+            if (F.Status == "")
+            {
+                NORMFlight temp2 = new NORMFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(4);
+                TRFees += total[2];
+                TRPromo += total[1];
+                TRFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+
+            if (F.Status == "CFFT")
+            {
+                CFFTFlight temp2 = new CFFTFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(4);
+                TRFees += total[2];
+                TRPromo += total[1];
+                TRFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+
+            if (F.Status == "DDJB")
+            {
+                DDJBFlight temp2 = new DDJBFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(4);
+                TRFees += total[2];
+                TRPromo += total[1];
+                TRFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+
+            if (F.Status == "LWTT")
+            {
+                LWTTFlight temp2 = new LWTTFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(4);
+                TRFees += total[2];
+                TRPromo += total[1];
+                TRFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+        }
+
+        if (id[0] == "EK")
+        {
+            if (F.Status == "")
+            {
+                NORMFlight temp2 = new NORMFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(3);
+                EKFees += total[2];
+                EKPromo += total[1];
+                EKFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+
+            if (F.Status == "CFFT")
+            {
+                CFFTFlight temp2 = new CFFTFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(3);
+                EKFees += total[2];
+                EKPromo += total[1];
+                EKFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+
+            if (F.Status == "DDJB")
+            {
+                DDJBFlight temp2 = new DDJBFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(3);
+                EKFees += total[2];
+                EKPromo += total[1];
+                EKFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+
+            if (F.Status == "LWTT")
+            {
+                LWTTFlight temp2 = new LWTTFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(3);
+                EKFees += total[2];
+                EKPromo += total[1];
+                EKFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+        }
+
+        if (id[0] == "BA")
+        {
+            if (F.Status == "")
+            {
+                NORMFlight temp2 = new NORMFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(3);
+                BAFees += total[2];
+                BAPromo += total[1];
+                BAFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+
+            if (F.Status == "CFFT")
+            {
+                CFFTFlight temp2 = new CFFTFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(3);
+                BAFees += total[2];
+                BAPromo += total[1];
+                BAFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+
+            if (F.Status == "DDJB")
+            {
+                DDJBFlight temp2 = new DDJBFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(3);
+                BAFees += total[2];
+                BAPromo += total[1];
+                BAFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+
+            if (F.Status == "LWTT")
+            {
+                LWTTFlight temp2 = new LWTTFlight(F.FlightNumber, F.Origin, F.Destination, Convert.ToString(F.ExpectedTime), F.Status);
+                List<double> total = temp2.CalculateFees(3);
+                BAFees += total[2];
+                BAPromo += total[1];
+                BAFinal += total[0];
+                FinalFee += total[0];
+                FinalDiscount += total[1];
+                TerminalFee += total[2];
+            }
+        }
+
+    }
+
+    Console.WriteLine("{0,-20} {1,-25} {2,-20} {3,-20}", "Airline Name", "Fees Before Discount", "Discount Amount", "Fees After Discount");
+    Console.WriteLine("{0,-20} {1,-25} {2,-20} {3,-20}", "Singapore Airlines", SQFees, SQPromo, SQFinal);
+    Console.WriteLine("{0,-20} {1,-25} {2,-20} {3,-20}", "Malaysia Airlines", MHFees, MHPromo, MHFinal);
+    Console.WriteLine("{0,-20} {1,-25} {2,-20} {3,-20}", "Japan Airlines", JLFees, JLPromo, JLFinal);
+    Console.WriteLine("{0,-20} {1,-25} {2,-20} {3,-20}", "Cathay Pacific", CXFees, CXPromo, CXFinal);
+    Console.WriteLine("{0,-20} {1,-25} {2,-20} {3,-20}", "Qantas Airways", QFFees, QFPromo, QFFinal);
+    Console.WriteLine("{0,-20} {1,-25} {2,-20} {3,-20}", "AirAsia", TRFees, TRPromo, TRFinal);
+    Console.WriteLine("{0,-20} {1,-25} {2,-20} {3,-20}", "Emirates", EKFees, EKPromo, EKFinal);
+    Console.WriteLine("{0,-20} {1,-25} {2,-20} {3,-20}", "British Airways", BAFees, BAPromo, BAFinal);
+    Console.WriteLine();
+
+    double PercentageDiscount = (FinalDiscount / TerminalFee) * 100;
+    Console.WriteLine("Total Airline Fees to be charged: {0}", TerminalFee);
+    Console.WriteLine("Total Discount: {0}", FinalDiscount);
+    Console.WriteLine("Total Airline Fees that Terminal 5 will collect: {0}", FinalFee);
+    Console.WriteLine("Percentage of discount: {0}%", PercentageDiscount);
+}
+
 // Main Loop
 Console.WriteLine();
 Console.WriteLine();
 Console.WriteLine();
 Console.WriteLine();
 DisplayTable();
+
+
