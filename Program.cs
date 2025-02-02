@@ -29,6 +29,7 @@ void DisplayTable()
     Console.WriteLine("5. Display Airline Flights");
     Console.WriteLine("6. Modify Flight Details");
     Console.WriteLine("7. Display Flight Schedule");
+    Console.WriteLine("8. Process all unassigned flights to boarding gates in bulk");
     Console.WriteLine("9. Display the total fee per airline");
     Console.WriteLine("0. Exit");
     Console.WriteLine();
@@ -77,6 +78,12 @@ void DisplayTable()
     else if (option == 7)
     {
         DisplayScheduledFlights();
+        Console.WriteLine();
+        DisplayTable();
+    }
+    else if (option == 8)
+    {
+        ProcessUnassignedFlights();
         Console.WriteLine();
         DisplayTable();
     }
@@ -650,7 +657,72 @@ void DisplayScheduledFlights()
         BoardingGate = "Unassigned";
     }
 }
+// Advanced Features part (a)
+void ProcessUnassignedFlights()
+{
+    Queue<Flight> flightQueue = new Queue<Flight>();
+    int unassignedFlights = 0, unassignedGates = 0;
 
+    // Dictionary to store FlightNumber -> BoardingGate assignments
+    Dictionary<string, string> flightGateAssignments = new Dictionary<string, string>();
+
+    // Identify flights without boarding gates
+    foreach (var flight in FlightCollection.Values)
+    {
+        if (!flightGateAssignments.ContainsKey(flight.FlightNumber)) // If flight not assigned a gate
+        {
+            flightQueue.Enqueue(flight);
+            unassignedFlights++;
+        }
+    }
+    Console.WriteLine($"Total flights without a boarding gate: {unassignedFlights}");
+
+    // Identify unassigned boarding gates
+    List<BoardingGate> availableGates = new List<BoardingGate>();
+    foreach (var gate in boardingGate.Values)
+    {
+        if (!flightGateAssignments.ContainsValue(gate.GateName)) // If gate is not assigned
+        {
+            availableGates.Add(gate);
+            unassignedGates++;
+        }
+    }
+    Console.WriteLine($"Total unassigned boarding gates: {unassignedGates}");
+
+    int flightsAssigned = 0;
+
+    // Process flights in queue
+    Console.WriteLine("{0,-16}{1,-23}{2,-23}{3,-23}{4,-32}{5,-10}", "Flight Number", "Airline Name", "Origin", "Destination", "Expected Departure/Arrival Time", "Boarding Gate");
+    while (flightQueue.Count > 0 && availableGates.Count > 0)
+    {
+        Flight flight = flightQueue.Dequeue();
+        BoardingGate assignedGate = availableGates.FirstOrDefault(); // Assign the first available gate
+
+        // Assign the gate if available
+        if (assignedGate != null)
+        {
+            flightGateAssignments[flight.FlightNumber] = assignedGate.GateName;
+            availableGates.Remove(assignedGate); // Remove from available gates list
+            flightsAssigned++;
+        }
+    }
+        // Display flight details
+        foreach (var flights in FlightCollection.Values)
+        {
+            string airlineName = airlines.Values.FirstOrDefault(a => a.Code == flights.FlightNumber.Split(' ')[0])?.Name ?? "Unknown Airline";
+
+            Console.WriteLine("{0,-16}{1,-23}{2,-23}{3,-23}{4,-32}{5,-3}",
+                flights.FlightNumber, airlineName, flights.Origin, flights.Destination,
+                flights.ExpectedTime, flightGateAssignments.ContainsKey(flights.FlightNumber) ? flightGateAssignments[flights.FlightNumber] : "Unassigned");
+        }
+
+        // Display final statistics
+        double percentageAssigned = unassignedFlights > 0 ? (flightsAssigned / (double)unassignedFlights) * 100 : 0;
+        Console.WriteLine($"Total Flights Processed: {unassignedFlights}");
+        Console.WriteLine($"Total Flights Assigned: {flightsAssigned}");
+        Console.WriteLine($"Percentage of flights assigned automatically: {percentageAssigned:F2}%");
+    
+}
 
 // Advanced Features part (b)
 void DisplayTotalFee()
@@ -1172,5 +1244,4 @@ Console.WriteLine();
 Console.WriteLine();
 Console.WriteLine();
 DisplayTable();
-
-
+    
